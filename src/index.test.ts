@@ -54,21 +54,18 @@ for (const clientsForProvider of CLIENTS_BY_PROVIDER) {
       async () => {
         const client = createAiClient(clientParameters);
 
-        const askResponse = await client.ask({
-          messages: [
-            {
-              role: "user",
-              content: `Answer me with "Hello, World!" and nothing else. (DO NOT WRITE CODE, ONLY ANSWER WITH 'Hello, World!')`,
-            },
-          ],
-          temperature: 0,
-          thinking: "off",
-          topK: 32,
-          topP: 0.9,
-          presencePenalty: 0.1,
-          frequencyPenalty: 0.1,
-          user: "test-user",
-        });
+        const askResponse = await client.ask(
+          `Answer me with "Hello, World!" and nothing else. (DO NOT WRITE CODE, ONLY ANSWER WITH 'Hello, World!')`,
+          {
+            temperature: 0,
+            thinking: "off",
+            topK: 32,
+            topP: 0.9,
+            presencePenalty: 0.1,
+            frequencyPenalty: 0.1,
+            user: "test-user",
+          },
+        );
 
         if (askResponse instanceof Error) {
           throw askResponse;
@@ -94,22 +91,19 @@ for (const clientsForProvider of CLIENTS_BY_PROVIDER) {
       async () => {
         const client = createAiClient(clientParameters);
 
-        const askJsonResponse = await client.askJson({
-          messages: [
-            {
-              role: "user",
-              content: "Return a greeting in English with the language name",
-            },
-          ],
-          schema,
-          temperature: 0,
-          topK: 1,
-          topP: 1,
-          thinking: "low",
-          presencePenalty: 0,
-          frequencyPenalty: 0,
-          user: "test-user",
-        });
+        const askJsonResponse = await client.askJson(
+          "Return a greeting in English with the language name",
+          {
+            schema,
+            temperature: 0,
+            topK: 1,
+            topP: 1,
+            thinking: "low",
+            presencePenalty: 0,
+            frequencyPenalty: 0,
+            user: "test-user",
+          },
+        );
 
         if (askJsonResponse instanceof Error) {
           throw askJsonResponse;
@@ -128,22 +122,18 @@ for (const clientsForProvider of CLIENTS_BY_PROVIDER) {
         const client = createAiClient(clientParameters);
         const streamChunks: Array<string> = [];
 
-        const stream = client.stream({
-          messages: [
-            {
-              role: "user",
-              content:
-                "Output the numbers 1, 2, and 3, each on a separate line.",
-            },
-          ],
-          temperature: 0,
-          topK: 1,
-          topP: 1,
-          thinking: "off",
-          presencePenalty: 0,
-          frequencyPenalty: 0,
-          user: "test-user",
-        });
+        const stream = client.stream(
+          "Output the numbers 1, 2, and 3, each on a separate line.",
+          {
+            temperature: 0,
+            topK: 1,
+            topP: 1,
+            thinking: "off",
+            presencePenalty: 0,
+            frequencyPenalty: 0,
+            user: "test-user",
+          },
+        );
 
         for await (const chunk of stream) {
           streamChunks.push(chunk);

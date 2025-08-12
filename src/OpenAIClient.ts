@@ -98,7 +98,7 @@ function createBaseCompletionParams(
   return {
     model,
     messages: prepareMessages(
-      askParameters.messages,
+      askParameters.messages ?? [],
       askParameters.instructions ?? instructions,
     ),
     reasoning_effort: !isThinkingModel
@@ -127,10 +127,18 @@ export function createOpenAiClient(
   const client = new OpenAI(clientParameters);
 
   return {
-    ask: async (askParameters) => {
+    ask: async (input, askParameters = {}) => {
       try {
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
         const completion = await client.chat.completions.create({
-          ...createBaseCompletionParams(clientParameters, askParameters),
+          ...createBaseCompletionParams(clientParameters, updatedParameters),
           stream: false,
         });
 
@@ -141,10 +149,18 @@ export function createOpenAiClient(
       }
     },
 
-    askJson: async (askParameters) => {
+    askJson: async (input, askParameters) => {
       try {
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
         const completion = await client.chat.completions.create({
-          ...createBaseCompletionParams(clientParameters, askParameters),
+          ...createBaseCompletionParams(clientParameters, updatedParameters),
           stream: false,
           response_format: {
             type: "json_schema" as const,
@@ -166,10 +182,18 @@ export function createOpenAiClient(
       }
     },
 
-    stream: async function* (askParameters) {
+    stream: async function* (input, askParameters = {}) {
       try {
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
         const stream = await client.chat.completions.create({
-          ...createBaseCompletionParams(clientParameters, askParameters),
+          ...createBaseCompletionParams(clientParameters, updatedParameters),
           stream: true,
         });
 

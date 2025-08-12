@@ -100,7 +100,7 @@ function createGenerationConfig(
   }
 
   const systemInstruction = extractSystemPrompt(
-    askParameters.messages,
+    askParameters.messages ?? [],
     askParameters.instructions ?? instructions,
   );
   if (systemInstruction) {
@@ -118,14 +118,22 @@ export function createGeminiClient(
   });
 
   return {
-    ask: async (askParameters) => {
+    ask: async (input, askParameters = {}) => {
       try {
-        const contents = prepareMessages(askParameters.messages);
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
+        const contents = prepareMessages(updatedParameters.messages);
 
         const params: GenerateContentParameters = {
           model: clientParameters.model,
           contents,
-          config: createGenerationConfig(clientParameters, askParameters),
+          config: createGenerationConfig(clientParameters, updatedParameters),
         };
 
         const response = await genAI.models.generateContent(params);
@@ -135,15 +143,23 @@ export function createGeminiClient(
       }
     },
 
-    askJson: async (askParameters) => {
+    askJson: async (input, askParameters) => {
       try {
-        const contents = prepareMessages(askParameters.messages);
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
+        const contents = prepareMessages(updatedParameters.messages);
 
         const params: GenerateContentParameters = {
           model: clientParameters.model,
           contents,
           config: {
-            ...createGenerationConfig(clientParameters, askParameters),
+            ...createGenerationConfig(clientParameters, updatedParameters),
             responseMimeType: "application/json",
             responseJsonSchema: toJsonSchema(askParameters.schema),
           },
@@ -163,14 +179,22 @@ export function createGeminiClient(
       }
     },
 
-    stream: async function* (askParameters) {
+    stream: async function* (input, askParameters = {}) {
       try {
-        const contents = prepareMessages(askParameters.messages);
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
+        const contents = prepareMessages(updatedParameters.messages);
 
         const params: GenerateContentParameters = {
           model: clientParameters.model,
           contents,
-          config: createGenerationConfig(clientParameters, askParameters),
+          config: createGenerationConfig(clientParameters, updatedParameters),
         };
 
         const response = await genAI.models.generateContentStream(params);

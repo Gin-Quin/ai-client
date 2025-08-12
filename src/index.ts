@@ -19,7 +19,7 @@ export interface AiClientCommonParameters {
 }
 
 export interface AskParameters {
-  messages: Message[];
+  messages?: Message[];
 
   //  Model behavior
   temperature?: number; // 0-2, controls randomness (0 = deterministic, 2 = very random)
@@ -38,11 +38,12 @@ export interface AskParameters {
 }
 
 export interface AiClient {
-  ask(parameters: AskParameters): Promise<string | Error>;
+  ask(input: string, parameters?: AskParameters): Promise<string | Error>;
   askJson<Schema extends ObjectSchema<any, any>>(
+    input: string,
     parameters: AskParametersJSON<Schema>,
   ): Promise<InferOutput<Schema> | Error>;
-  stream(parameters: AskParameters): AsyncGenerator<string>;
+  stream(input: string, parameters?: AskParameters): AsyncGenerator<string>;
 }
 
 export interface AskParametersJSON<Schema extends ObjectSchema<any, any>>

@@ -67,15 +67,15 @@ function prepareMessages(
 
   // Handle systemPrompt by adding it to messages if provided
   if (systemPrompt) {
-    const hasSystemMessage = messages.some((msg) => msg.role === "system");
+    const hasSystemMessage = messages?.some((msg) => msg.role === "system");
     if (!hasSystemMessage) {
       preparedMessages = [
         { role: "system", content: systemPrompt },
-        ...messages,
+        ...(messages ?? []),
       ];
     } else {
       // If there's already a system message, append to it
-      preparedMessages = preparedMessages.map((msg) =>
+      preparedMessages = preparedMessages?.map((msg) =>
         msg.role === "system"
           ? { ...msg, content: `${msg.content}\n\n${systemPrompt}` }
           : msg,
@@ -84,17 +84,19 @@ function prepareMessages(
   }
 
   // Map messages and handle unsupported roles
-  return preparedMessages.map((msg) => {
-    // Only map supported Groq message roles
-    if (msg.role === "function" || msg.role === "tool") {
-      // Convert unsupported roles to user messages
-      return { role: "user" as const, content: msg.content };
-    }
-    return {
-      role: msg.role as "system" | "user" | "assistant",
-      content: msg.content,
-    };
-  });
+  return (
+    preparedMessages?.map((msg) => {
+      // Only map supported Groq message roles
+      if (msg.role === "function" || msg.role === "tool") {
+        // Convert unsupported roles to user messages
+        return { role: "user" as const, content: msg.content };
+      }
+      return {
+        role: msg.role as "system" | "user" | "assistant",
+        content: msg.content,
+      };
+    }) ?? []
+  );
 }
 
 // Helper function to create base completion parameters
@@ -133,10 +135,18 @@ export function createGroqClient(
   });
 
   return {
-    ask: async (askParameters) => {
+    ask: async (input, askParameters = {}) => {
       try {
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
         const completion = await client.chat.completions.create({
-          ...createBaseCompletionParams(clientParameters, askParameters),
+          ...createBaseCompletionParams(clientParameters, updatedParameters),
           stream: false,
         });
 
@@ -147,8 +157,16 @@ export function createGroqClient(
       }
     },
 
-    askJson: async (askParameters) => {
+    askJson: async (input, askParameters) => {
       try {
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
         const { model } = clientParameters;
         const { schema } = askParameters;
 
@@ -171,21 +189,21 @@ export function createGroqClient(
         // For json_object format, add JSON instructions to system prompt
         let baseParams = createBaseCompletionParams(
           clientParameters,
-          askParameters,
+          updatedParameters,
         );
         if (!supportsStructuredOutputs) {
           const jsonSchema = JSON.stringify(toJsonSchema(schema), null, 2);
           const jsonInstructions = `Answer with JSON only. Follow this exact schema:\n\n${jsonSchema}`;
 
           const instructions =
-            askParameters.instructions ?? clientParameters.instructions;
+            updatedParameters.instructions ?? clientParameters.instructions;
           const combinedInstructions = instructions
             ? `${instructions}\n\n${jsonInstructions}`
             : jsonInstructions;
 
           baseParams = {
             ...baseParams,
-            messages: prepareMessages(askParameters, combinedInstructions),
+            messages: prepareMessages(updatedParameters, combinedInstructions),
           };
         }
 
@@ -206,10 +224,18 @@ export function createGroqClient(
       }
     },
 
-    stream: async function* (askParameters) {
+    stream: async function* (input, askParameters = {}) {
       try {
+        const updatedParameters = {
+          ...askParameters,
+          messages: [
+            ...(askParameters.messages ?? []),
+            { role: "user" as const, content: input },
+          ],
+        };
+
         const stream = await client.chat.completions.create({
-          ...createBaseCompletionParams(clientParameters, askParameters),
+          ...createBaseCompletionParams(clientParameters, updatedParameters),
           stream: true,
         });
 
