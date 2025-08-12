@@ -1,3 +1,8 @@
+/**
+ * This module contains functions to create and interact with OpenAI clients.
+ * @module
+ */
+
 import { OpenAI, type ClientOptions as OpenAiClientOptions } from "openai";
 import type {
   AiClient,
@@ -13,6 +18,9 @@ import type {
   ChatCompletionCreateParamsStreaming,
 } from "openai/resources.js";
 
+/**
+ * Available OpenAI model identifiers
+ */
 export const openAiModels = [
   "gpt-4.1",
   "gpt-4.1-mini",
@@ -44,8 +52,14 @@ const thinkingModels = [
   "o4-mini",
 ];
 
+/**
+ * Union type of all available OpenAI models
+ */
 export type OpenAiModel = (typeof openAiModels)[number];
 
+/**
+ * Configuration parameters for creating an OpenAI client
+ */
 export type OpenAiClientParameters = OpenAiClientOptions &
   AiClientCommonParameters & {
     model: OpenAiModel;
@@ -124,6 +138,11 @@ function createBaseCompletionParams(
   };
 }
 
+/**
+ * Creates an OpenAI client instance
+ * @param clientParameters - Configuration parameters for the OpenAI client
+ * @returns An AI client instance configured for OpenAI
+ */
 export function createOpenAiClient(
   clientParameters: OpenAiClientParameters,
 ): AiClient {

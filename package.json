@@ -1,14 +1,29 @@
 {
   "name": "@gin-quin/ai-client",
-  "description": "A simple library that provides an unified interface to call either OpenAI, Gemini, Claude or Groq AI providers.",
+  "version": "1.0.1",
+  "description": "A universal, easy-to-use AI client with unified interface for OpenAI, Claude, Gemini, and Groq.",
   "type": "module",
-  "module": "index.ts",
-  "exports": {
-    ".": "./index.ts",
-    "./*": "./*.ts"
+  "module": "./library/index.js",
+  "repository": {
+    "url": "https://github.com/Gin-Quin/ai-client"
   },
+  "exports": {
+    ".": "./library/index.js",
+    "./claude": "./library/claude.js",
+    "./openai": "./library/openAi.js",
+    "./gemini": "./library/gemini.js",
+    "./groq": "./library/groq.js"
+  },
+  "files": [
+    "./library/",
+    "./package.json"
+  ],
   "scripts": {
-    "start": "bun run src/index.ts",
+    "build": "bun build library/*.ts --minify --sourcemap --outdir library",
+    "unbuild": "rm ./library/*.js*",
+    "deploy": "bun run build && bun deploy:npm && bun deploy:jsr && bun run unbuild",
+    "deploy:npm": "bun run build && bun publish --access=public --allow-dirty && bun run unbuild",
+    "deploy:jsr": "bun run build && bun x jsr publish --allow-dirty --allow-slow-types && bun run unbuild",
     "test": "bun test"
   },
   "dependencies": {

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@gin-quin/ai-client",
+  "version": "1.0.1",
+  "license": "MIT",
+  "description": "A universal, easy-to-use AI client with unified interface for OpenAI, Claude, Gemini, and Groq.",
+  "exports": {
+    ".": "./library/index.ts",
+    "./claude": "./library/claude.ts",
+    "./openai": "./library/openAi.ts",
+    "./gemini": "./library/gemini.ts",
+    "./groq": "./library/groq.ts"
+  },
+  "publish": {
+    "include": ["./library/", "./README.md", "package.json"]
+  }
+}

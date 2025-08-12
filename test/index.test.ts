@@ -1,10 +1,10 @@
 import { test, expect } from "bun:test";
-import { openAiModels } from "./OpenAIClient";
+import { openAiModels } from "../library/openAi";
 import { object, parse, string } from "valibot";
-import { createAiClient, type AiClientParameters } from "./index";
-import { geminiModels } from "./GeminiClient";
-import { groqModels } from "./GroqClient";
-import { claudeModels } from "./ClaudeClient";
+import { createAiClient, type AiClientParameters } from "../library";
+import { geminiModels } from "../library/gemini";
+import { groqModels } from "../library/groq";
+import { claudeModels } from "../library/claude";
 
 const testTimeout = 30_000;
 
@@ -25,21 +25,21 @@ const CLAUDE_API_KEY =
   process.env.CLAUDE_API_KEY ?? raise("CLAUDE_API_KEY not found");
 
 const CLIENTS_BY_PROVIDER: Array<Array<AiClientParameters>> = [
-  // openAiModels.map((model) => ({
-  //   provider: "openai" as const,
-  //   model,
-  //   apiKey: OPENAI_API_KEY,
-  // })),
-  // geminiModels.map((model) => ({
-  //   provider: "google",
-  //   model,
-  //   apiKey: GEMINI_API_KEY,
-  // })),
-  // groqModels.map((model) => ({
-  //   provider: "groq",
-  //   model,
-  //   apiKey: GROQ_API_KEY,
-  // })),
+  openAiModels.map((model) => ({
+    provider: "openai" as const,
+    model,
+    apiKey: OPENAI_API_KEY,
+  })),
+  geminiModels.map((model) => ({
+    provider: "google",
+    model,
+    apiKey: GEMINI_API_KEY,
+  })),
+  groqModels.map((model) => ({
+    provider: "groq",
+    model,
+    apiKey: GROQ_API_KEY,
+  })),
   claudeModels.map((model) => ({
     provider: "claude" as const,
     model,

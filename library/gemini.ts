@@ -1,3 +1,8 @@
+/**
+ * This module contains functions to create and interact with Gemini clients.
+ * @module
+ */
+
 import {
   GoogleGenAI,
   type GenerateContentConfig,
@@ -14,16 +19,28 @@ import { toJsonSchema } from "@valibot/to-json-schema";
 import { parse } from "valibot";
 import { handleError } from "./handleError";
 
+/**
+ * Available Gemini model identifiers
+ */
 export const geminiModels = [
   "gemini-2.5-pro",
   "gemini-2.5-flash",
   "gemini-2.5-flash-lite",
 ] as const;
 
+/**
+ * Models that support thinking/reasoning capabilities
+ */
 export const thinkingOnlyModels = ["gemini-2.5-pro"];
 
+/**
+ * Union type of all available Gemini models
+ */
 export type GeminiModel = (typeof geminiModels)[number];
 
+/**
+ * Configuration parameters for creating a Gemini client
+ */
 export type GeminiClientParameters = AiClientCommonParameters & {
   model: GeminiModel;
 };
@@ -113,6 +130,11 @@ function createGenerationConfig(
   return config;
 }
 
+/**
+ * Creates a Gemini client instance
+ * @param clientParameters - Configuration parameters for the Gemini client
+ * @returns An AI client instance configured for Gemini
+ */
 export function createGeminiClient(
   clientParameters: GeminiClientParameters,
 ): AiClient {

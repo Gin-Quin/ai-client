@@ -1,3 +1,8 @@
+/**
+ * This module contains functions to create and interact with Claude clients.
+ * @module
+ */
+
 import {
   Anthropic,
   type ClientOptions as AnthropicClientOptions,
@@ -14,17 +19,25 @@ import { handleError } from "./handleError";
 import type {
   MessageCreateParamsNonStreaming,
   MessageCreateParamsStreaming,
-  MessageStreamEvent,
 } from "@anthropic-ai/sdk/resources/messages.js";
 
+/**
+ * Available Claude model identifiers
+ */
 export const claudeModels = [
   "claude-sonnet-4-0",
   "claude-opus-4-1",
   "claude-3-5-haiku-latest",
 ] as const;
 
+/**
+ * Union type of all available Claude models
+ */
 export type ClaudeModel = (typeof claudeModels)[number];
 
+/**
+ * Configuration parameters for creating a Claude client
+ */
 export type ClaudeClientParameters = AnthropicClientOptions &
   AiClientCommonParameters & {
     model: ClaudeModel;
@@ -94,6 +107,11 @@ function createBaseCompletionParams(
   };
 }
 
+/**
+ * Creates a Claude client instance
+ * @param clientParameters - Configuration parameters for the Claude client
+ * @returns An AI client instance configured for Claude
+ */
 export function createClaudeClient(
   clientParameters: ClaudeClientParameters,
 ): AiClient {

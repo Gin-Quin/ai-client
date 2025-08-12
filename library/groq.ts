@@ -1,3 +1,8 @@
+/**
+ * This module contains functions to create and interact with Groq clients.
+ * @module
+ */
+
 import Groq from "groq-sdk";
 import type {
   AiClient,
@@ -14,6 +19,9 @@ import type {
 } from "groq-sdk/resources/chat/completions.mjs";
 import { toJsonSchema } from "@valibot/to-json-schema";
 
+/**
+ * Available Groq model identifiers
+ */
 export const groqModels = [
   "llama-3.3-70b-versatile",
   "llama-3.1-8b-instant",
@@ -26,6 +34,9 @@ export const groqModels = [
   "qwen/qwen3-32b",
 ] as const;
 
+/**
+ * Models that support structured JSON schema outputs
+ */
 export const modelsSupportingStructuredOutputs = [
   "openai/gpt-oss-20b",
   "openai/gpt-oss-120b",
@@ -34,6 +45,9 @@ export const modelsSupportingStructuredOutputs = [
   "meta-llama/llama-4-scout-17b-16e-instruct",
 ];
 
+/**
+ * Maps reasoning effort levels to model-specific values
+ */
 export const getReasoningEffortByModel: Record<
   GroqModel,
   (
@@ -51,8 +65,14 @@ export const getReasoningEffortByModel: Record<
   "qwen/qwen3-32b": (value) => (value == "off" ? "none" : "default"),
 };
 
+/**
+ * Union type of all available Groq models
+ */
 export type GroqModel = (typeof groqModels)[number];
 
+/**
+ * Configuration parameters for creating a Groq client
+ */
 export type GroqClientParameters = AiClientCommonParameters & {
   model: GroqModel;
 };
@@ -127,6 +147,11 @@ function createBaseCompletionParams(
   };
 }
 
+/**
+ * Creates a Groq client instance
+ * @param clientParameters - Configuration parameters for the Groq client
+ * @returns An AI client instance configured for Groq
+ */
 export function createGroqClient(
   clientParameters: GroqClientParameters,
 ): AiClient {
