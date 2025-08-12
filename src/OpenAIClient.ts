@@ -110,7 +110,10 @@ function createBaseCompletionParams(
       ? undefined
       : askParameters.temperature,
     max_completion_tokens: askParameters.maxTokens,
-    top_p: hasTemperatureRestriction ? undefined : askParameters.topP,
+    top_p:
+      hasTemperatureRestriction || askParameters.temperature !== undefined
+        ? undefined
+        : askParameters.topP,
     presence_penalty: hasTemperatureRestriction
       ? undefined
       : askParameters.presencePenalty,

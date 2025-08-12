@@ -86,7 +86,10 @@ function createGenerationConfig(
   if (askParameters.maxTokens !== undefined) {
     config.maxOutputTokens = askParameters.maxTokens;
   }
-  if (askParameters.topP !== undefined) {
+  if (
+    askParameters.topP !== undefined &&
+    askParameters.temperature === undefined
+  ) {
     config.topP = askParameters.topP;
   }
   if (askParameters.topK !== undefined) {

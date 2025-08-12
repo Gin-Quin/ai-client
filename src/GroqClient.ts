@@ -118,7 +118,7 @@ function createBaseCompletionParams(
     messages: prepareMessages(askParameters, instructions),
     temperature: askParameters.temperature,
     max_tokens: askParameters.maxTokens,
-    top_p: askParameters.topP,
+    top_p: askParameters.temperature ? undefined : askParameters.topP,
     presence_penalty: askParameters.presencePenalty,
     frequency_penalty: askParameters.frequencyPenalty,
     user: askParameters.user,

@@ -2,14 +2,29 @@ import { type InferOutput, type ObjectSchema } from "valibot";
 import {
   createOpenAiClient,
   type OpenAiClientParameters,
+  type OpenAiModel,
+  openAiModels,
 } from "./OpenAIClient";
 import {
   createGeminiClient,
   type GeminiClientParameters,
+  type GeminiModel,
+  geminiModels,
 } from "./GeminiClient";
-import { createGroqClient, type GroqClientParameters } from "./GroqClient";
+import {
+  createGroqClient,
+  type GroqClientParameters,
+  type GroqModel,
+  groqModels,
+} from "./GroqClient";
+import {
+  createClaudeClient,
+  type ClaudeClientParameters,
+  type ClaudeModel,
+  claudeModels,
+} from "./ClaudeClient";
 
-export type AiClientProvider = "openai" | "gemini" | "groq";
+export type AiClientProvider = "openai" | "gemini" | "groq" | "claude";
 
 export interface AiClientCommonParameters {
   apiKey: string;
@@ -24,7 +39,7 @@ export interface AskParameters {
   //  Model behavior
   temperature?: number; // 0-2, controls randomness (0 = deterministic, 2 = very random)
   maxTokens?: number; // Maximum tokens in the response
-  topP?: number; // 0-1, nucleus sampling (alternative to temperature)
+  topP?: number; // 0-1, nucleus sampling (alternative to temperature, ignored if temperature is set)
   topK?: number; // Top-k sampling (common in open-source models)
 
   // Content filtering
@@ -59,7 +74,8 @@ export interface Message {
 export type AiClientParameters =
   | ({ provider: "openai" } & OpenAiClientParameters)
   | ({ provider: "groq" } & GroqClientParameters)
-  | ({ provider: "google" } & GeminiClientParameters);
+  | ({ provider: "google" } & GeminiClientParameters)
+  | ({ provider: "claude" } & ClaudeClientParameters);
 
 export type Thinking = "off" | "low" | "medium" | "high";
 
@@ -71,5 +87,17 @@ export function createAiClient(parameters: AiClientParameters): AiClient {
       return createGeminiClient(parameters);
     case "groq":
       return createGroqClient(parameters);
+    case "claude":
+      return createClaudeClient(parameters);
   }
 }
+
+// Export model types and constants for convenience
+export type { OpenAiModel, ClaudeModel, GeminiModel, GroqModel };
+export { openAiModels, claudeModels, geminiModels, groqModels };
+export {
+  createOpenAiClient,
+  createClaudeClient,
+  createGeminiClient,
+  createGroqClient,
+};
