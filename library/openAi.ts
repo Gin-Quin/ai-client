@@ -149,6 +149,9 @@ export function createOpenAiClient(
   const client = new OpenAI(clientParameters);
 
   return {
+    provider: "openai",
+    model: clientParameters.model,
+
     ask: async (input, askParameters = {}) => {
       try {
         const updatedParameters = {

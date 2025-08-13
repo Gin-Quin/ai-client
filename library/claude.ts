@@ -118,6 +118,9 @@ export function createClaudeClient(
   const client = new Anthropic(clientParameters);
 
   return {
+    provider: "claude",
+    model: clientParameters.model,
+
     ask: async (input, askParameters = {}) => {
       try {
         const updatedParameters = {

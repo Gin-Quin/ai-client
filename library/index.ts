@@ -85,6 +85,18 @@ export interface AskParameters {
  */
 export interface AiClient {
   /**
+   * Provider of the AI client
+   * @example "openai" | "groq" | "anthropic" | ...
+   */
+  provider: AiClientProvider;
+
+  /**
+   * Model identifier for the AI client
+   * @example "gpt-3.5-turbo" | "gpt-4" | "llama-3.3" | ...
+   */
+  model: string;
+
+  /**
    * Ask the AI model a question and get a text response
    * @param input - The input message to send to the AI
    * @param parameters - Optional parameters for the request

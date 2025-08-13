@@ -160,6 +160,9 @@ export function createGroqClient(
   });
 
   return {
+    provider: "groq",
+    model: clientParameters.model,
+
     ask: async (input, askParameters = {}) => {
       try {
         const updatedParameters = {

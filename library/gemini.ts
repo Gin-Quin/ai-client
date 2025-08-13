@@ -143,6 +143,9 @@ export function createGeminiClient(
   });
 
   return {
+    provider: "gemini",
+    model: clientParameters.model,
+
     ask: async (input, askParameters = {}) => {
       try {
         const updatedParameters = {
