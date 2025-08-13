@@ -32,13 +32,13 @@ Use the generic `createAiClient` function to quickly test different providers:
 ```ts
 import { createAiClient } from "@gin-quin/ai-client";
 
-const client = createAiClient({
+const ai = createAiClient({
   provider: "openai",
   model: "gpt-4.1",
   apiKey: process.env.OPENAI_API_KEY!,
 });
 
-const response = await client.ask("What is the capital of France?");
+const response = await ai.ask("What is the capital of France?");
 console.log(response); // "The capital of France is Paris."
 ```
 
@@ -49,7 +49,7 @@ Import specific clients to avoid bundling unnecessary SDKs:
 ```ts
 import { createOpenAiClient } from "@gin-quin/ai-client/openAi";
 
-const client = createOpenAiClient({
+const ai = createOpenAiClient({
   model: "gpt-4.1",
   apiKey: process.env.OPENAI_API_KEY!,
 });
@@ -62,7 +62,7 @@ const client = createOpenAiClient({
 ```ts
 import { createAiClient } from "@gin-quin/ai-client";
 
-const client = createAiClient({
+const ai = createAiClient({
   provider: "claude",
   model: "claude-sonnet-4-0",
   apiKey: process.env.CLAUDE_API_KEY!,
@@ -70,11 +70,11 @@ const client = createAiClient({
 });
 
 // Simple question
-const answer = await client.ask("Explain quantum computing in simple terms");
+const answer = await ai.ask("Explain quantum computing in simple terms");
 console.log(answer);
 
 // With parameters
-const response = await client.ask("Write a haiku about programming", {
+const response = await ai.ask("Write a haiku about programming", {
   temperature: 0.8,
   maxTokens: 100,
   thinking: "medium", // Only works with thinking models - ignored for other ones
@@ -89,7 +89,7 @@ This library uses **Valibot** for schema validation and is not compatible with o
 import { createAiClient } from "@gin-quin/ai-client";
 import { object, string, number } from "valibot";
 
-const client = createAiClient({
+const ai = createAiClient({
   provider: "groq",
   model: "llama-3.3-70b-versatile",
   apiKey: process.env.GROQ_API_KEY!,
@@ -102,7 +102,7 @@ const schema = object({
   occupation: string(),
 });
 
-const result = await client.askJson("Create a profile for a fictional character", {
+const result = await ai.askJson("Create a profile for a fictional character", {
   schema,
   temperature: 0.7,
 });
@@ -119,13 +119,13 @@ if (result instanceof Error) {
 ```ts
 import { createAiClient } from "@gin-quin/ai-client";
 
-const client = createAiClient({
+const ai = createAiClient({
   provider: "gemini",
   model: "gemini-2.5-flash",
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
-const stream = client.stream("Tell me a short story about a robot");
+const stream = ai.stream("Tell me a short story about a robot");
 
 for await (const chunk of stream) {
   process.stdout.write(chunk); // Stream text as it's generated
@@ -139,7 +139,7 @@ Use the `messages` parameter to maintain conversation context:
 ```ts
 import { createAiClient } from "@gin-quin/ai-client";
 
-const client = createAiClient({
+const ai = createAiClient({
   provider: "openai",
   model: "gpt-4.1",
   apiKey: process.env.OPENAI_API_KEY!,
@@ -155,7 +155,7 @@ const conversationHistory = [
 ];
 
 // Continue the conversation
-const response = await client.ask("Can you show me an example?", {
+const response = await ai.ask("Can you show me an example?", {
   messages: conversationHistory,
   temperature: 0.3,
 });
@@ -168,7 +168,7 @@ const messages = [];
 messages.push({ role: "system", content: "You are a travel advisor." });
 messages.push({ role: "user", content: "I want to visit Japan." });
 
-const advice = await client.ask("What's the best time to visit?", {
+const advice = await ai.ask("What's the best time to visit?", {
   messages,
   maxTokens: 200,
 });
@@ -181,13 +181,13 @@ const advice = await client.ask("What's the best time to visit?", {
 ```ts
 import { createOpenAiClient } from "@gin-quin/ai-client/openAi";
 
-const client = createOpenAiClient({
+const ai = createOpenAiClient({
   model: "o3-mini", // Supports thinking
   apiKey: process.env.OPENAI_API_KEY!,
   thinking: "high", // Enable reasoning
 });
 
-const response = await client.ask("Solve this complex math problem step by step: ...");
+const response = await ai.ask("Solve this complex math problem step by step: ...");
 ```
 
 ### Claude with Custom Instructions
@@ -195,7 +195,7 @@ const response = await client.ask("Solve this complex math problem step by step:
 ```ts
 import { createClaudeClient } from "@gin-quin/ai-client/claude";
 
-const client = createClaudeClient({
+const ai = createClaudeClient({
   model: "claude-sonnet-4-0",
   apiKey: process.env.CLAUDE_API_KEY!,
   instructions: "You are an expert code reviewer. Be thorough but constructive.",
@@ -207,7 +207,7 @@ const client = createClaudeClient({
 ```ts
 import { createGroqClient } from "@gin-quin/ai-client/groq";
 
-const client = createGroqClient({
+const ai = createGroqClient({
   model: "llama-3.3-70b-versatile",
   apiKey: process.env.GROQ_API_KEY!,
 });
@@ -218,12 +218,12 @@ const client = createGroqClient({
 ```ts
 import { createGeminiClient } from "@gin-quin/ai-client/gemini";
 
-const client = createGeminiClient({
+const ai = createGeminiClient({
   model: "gemini-2.5-flash",
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
-const response = await client.ask("Analyze this data", {
+const response = await ai.ask("Analyze this data", {
   temperature: 0.1,
   topK: 40,
   topP: 0.95,
@@ -309,13 +309,13 @@ The library is designed to be "compliant" and forgiving:
 
 ```ts
 // This works even though llama-3.3 doesn't support thinking
-const groqClient = createGroqClient({
+const groqAi = createGroqClient({
   model: "llama-3.3-70b-versatile",
   apiKey: process.env.GROQ_API_KEY!,
 });
 
 // The 'thinking' parameter will be silently ignored instead of throwing
-const response = await groqClient.ask("Hello", {
+const response = await groqAi.ask("Hello", {
   thinking: "high", // Ignored gracefully
   temperature: 0.5, // This works
 });
