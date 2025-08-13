@@ -1,6 +1,6 @@
 {
   "name": "@gin-quin/ai-client",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A universal, easy-to-use AI client with unified interface for OpenAI, Claude, Gemini, and Groq.",
   "type": "module",
   "module": "./library/index.js",
