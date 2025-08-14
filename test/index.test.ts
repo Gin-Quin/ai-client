@@ -1,7 +1,11 @@
 import { test, expect } from "bun:test";
 import { openAiModels } from "../library/openAi";
 import { object, parse, string } from "valibot";
-import { createAiClient, type AiClientParameters } from "../library";
+import {
+  createAiClient,
+  mistralModels,
+  type AiClientParameters,
+} from "../library";
 import { geminiModels } from "../library/gemini";
 import { groqModels } from "../library/groq";
 import { claudeModels } from "../library/claude";
@@ -12,38 +16,39 @@ const raise = (message: string) => {
   throw new Error(message);
 };
 
-const GEMINI_API_KEY =
-  process.env.GEMINI_API_KEY ?? raise("GEMINI_API_KEY not found");
-
-const OPENAI_API_KEY =
-  process.env.OPENAI_API_KEY ?? raise("OPENAI_API_KEY not found");
-
-const GROQ_API_KEY =
-  process.env.GROQ_API_KEY ?? raise("GROQ_API_KEY not found");
-
-const CLAUDE_API_KEY =
-  process.env.CLAUDE_API_KEY ?? raise("CLAUDE_API_KEY not found");
+const {
+  GEMINI_API_KEY,
+  OPENAI_API_KEY,
+  GROQ_API_KEY,
+  CLAUDE_API_KEY,
+  MISTRAL_API_KEY,
+} = process.env;
 
 const CLIENTS_BY_PROVIDER: Array<Array<AiClientParameters>> = [
-  openAiModels.map((model) => ({
-    provider: "openai" as const,
+  // openAiModels.map((model) => ({
+  //   provider: "openai" as const,
+  //   model,
+  //   apiKey: OPENAI_API_KEY ?? raise("OPENAI_API_KEY not found"),
+  // })),
+  // geminiModels.map((model) => ({
+  //   provider: "google",
+  //   model,
+  //   apiKey: GEMINI_API_KEY ?? raise("GEMINI_API_KEY not found"),
+  // })),
+  // groqModels.map((model) => ({
+  //   provider: "groq",
+  //   model,
+  //   apiKey: GROQ_API_KEY ?? raise("GROQ_API_KEY not found"),
+  // })),
+  // claudeModels.map((model) => ({
+  //   provider: "claude" as const,
+  //   model,
+  //   apiKey: CLAUDE_API_KEY ?? raise("CLAUDE_API_KEY not found"),
+  // })),
+  mistralModels.map((model) => ({
+    provider: "mistral" as const,
     model,
-    apiKey: OPENAI_API_KEY,
-  })),
-  geminiModels.map((model) => ({
-    provider: "google",
-    model,
-    apiKey: GEMINI_API_KEY,
-  })),
-  groqModels.map((model) => ({
-    provider: "groq",
-    model,
-    apiKey: GROQ_API_KEY,
-  })),
-  claudeModels.map((model) => ({
-    provider: "claude" as const,
-    model,
-    apiKey: CLAUDE_API_KEY,
+    apiKey: MISTRAL_API_KEY ?? raise("MISTRAL_API_KEY not found"),
   })),
 ] as const;
 

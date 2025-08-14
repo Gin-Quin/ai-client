@@ -11,6 +11,51 @@ A simple, universal, and easy-to-use AI client that provides a unified interface
 - **JSON Schema Support**: Structured output with validation using Valibot (required - not compatible with other validation libraries)
 - **Tree-shakable**: Import only what you need to minimize bundle size
 
+
+## Supported Models
+
+These models have been tested and can run interchangeably with `ai-client`:
+
+### Claude
+- `claude-sonnet-4-0`
+- `claude-opus-4-1`
+- `claude-3-5-haiku-latest`
+
+## Mistral
+- `magistral-medium-latest`
+- `magistral-small-latest`
+- `mistral-medium-latest`
+- `mistral-large-latest`
+- `ministral-3b-latest`
+- `ministral-8b-latest`
+- `open-mistral-nemo`
+- `mistral-small-latest`
+- `devstral-small-latest`
+- `devstral-medium-latest`
+- `mistral-saba-latest`
+
+### OpenAI
+- `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
+- `gpt-5`, `gpt-5-mini`, `gpt-5-nano`
+- `o3`, `o3-mini`, `o4-mini`
+
+
+### Groq
+- `llama-3.3-70b-versatile`
+- `llama-3.1-8b-instant`
+- `openai/gpt-oss-20b`
+- `openai/gpt-oss-120b`
+- `moonshotai/kimi-k2-instruct`
+- `meta-llama/llama-4-maverick-17b-128e-instruct`
+- `meta-llama/llama-4-scout-17b-16e-instruct`
+- `deepseek-r1-distill-llama-70b`
+- `qwen/qwen3-32b`
+
+### Gemini
+- `gemini-2.5-pro`
+- `gemini-2.5-flash`
+- `gemini-2.5-flash-lite`
+
 ## Installation
 
 ```bash
@@ -274,34 +319,6 @@ interface AskParameters {
   user?: string;                 // User identifier
 }
 ```
-
-## Supported Models
-
-### OpenAI
-- `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`
-- `gpt-5`, `gpt-5-mini`, `gpt-5-nano`
-- `o3`, `o3-mini`, `o4-mini`
-
-### Claude
-- `claude-sonnet-4-0`
-- `claude-opus-4-1`
-- `claude-3-5-haiku-latest`
-
-### Groq
-- `llama-3.3-70b-versatile`
-- `llama-3.1-8b-instant`
-- `openai/gpt-oss-20b`
-- `openai/gpt-oss-120b`
-- `moonshotai/kimi-k2-instruct`
-- `meta-llama/llama-4-maverick-17b-128e-instruct`
-- `meta-llama/llama-4-scout-17b-16e-instruct`
-- `deepseek-r1-distill-llama-70b`
-- `qwen/qwen3-32b`
-
-### Gemini
-- `gemini-2.5-pro`
-- `gemini-2.5-flash`
-- `gemini-2.5-flash-lite`
 
 ## Graceful Error Handling
 

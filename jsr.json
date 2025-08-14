@@ -9,7 +9,8 @@
     "./claude": "./library/claude.ts",
     "./openai": "./library/openAi.ts",
     "./gemini": "./library/gemini.ts",
-    "./groq": "./library/groq.ts"
+    "./groq": "./library/groq.ts",
+    "./mistral": "./library/mistral.ts"
   },
   "publish": {
     "include": ["./library/", "./README.md", "package.json"]

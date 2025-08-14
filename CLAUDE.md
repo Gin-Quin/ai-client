@@ -25,15 +25,13 @@ Default to using Bun instead of Node.js.
 
 ## Testing
 
-Use `bun test` to run tests.
+DO NOT WRITE YOUR OWN TESTS!
 
-```ts#index.test.ts
-import { test, expect } from "bun:test";
+And DO NOT run tests unless I explicitly tell you to, because the tests might be expensive to run.
 
-test("hello world", () => {
-  expect(1).toBe(1);
-});
-```
+The main test entry point is `test/index.test.ts`.
+
+If you need to run the tests, use `bun test`.
 
 ## Frontend
 

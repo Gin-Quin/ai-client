@@ -28,11 +28,22 @@ import {
   type ClaudeModel,
   claudeModels,
 } from "./claude";
+import {
+  createMistralClient,
+  type MistralClientParameters,
+  type MistralModel,
+  mistralModels,
+} from "./mistral";
 
 /**
  * Supported AI client providers
  */
-export type AiClientProvider = "openai" | "gemini" | "groq" | "claude";
+export type AiClientProvider =
+  | "openai"
+  | "gemini"
+  | "groq"
+  | "claude"
+  | "mistral";
 
 /**
  * Common parameters shared across all AI client providers
@@ -150,7 +161,8 @@ export type AiClientParameters =
   | ({ provider: "openai" } & OpenAiClientParameters)
   | ({ provider: "groq" } & GroqClientParameters)
   | ({ provider: "google" } & GeminiClientParameters)
-  | ({ provider: "claude" } & ClaudeClientParameters);
+  | ({ provider: "claude" } & ClaudeClientParameters)
+  | ({ provider: "mistral" } & MistralClientParameters);
 
 /**
  * Thinking/reasoning effort levels for AI models that support it
@@ -172,15 +184,22 @@ export function createAiClient(parameters: AiClientParameters): AiClient {
       return createGroqClient(parameters);
     case "claude":
       return createClaudeClient(parameters);
+    case "mistral":
+      return createMistralClient(parameters);
+    default:
+      // This should never happen due to TypeScript exhaustiveness checking
+      const _exhaustiveCheck: never = parameters;
+      throw new Error(`Unknown provider: ${(parameters as any).provider}`);
   }
 }
 
 // Export model types and constants for convenience
-export type { OpenAiModel, ClaudeModel, GeminiModel, GroqModel };
-export { openAiModels, claudeModels, geminiModels, groqModels };
+export type { OpenAiModel, ClaudeModel, GeminiModel, GroqModel, MistralModel };
+export { openAiModels, claudeModels, geminiModels, groqModels, mistralModels };
 export {
   createOpenAiClient,
   createClaudeClient,
   createGeminiClient,
   createGroqClient,
+  createMistralClient,
 };
